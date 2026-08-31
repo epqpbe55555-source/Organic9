@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — Amines Reactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0e15;
+    --bg-soft:#11141e;
+    --panel:#171a26;
+    --panel-2:#1e2233;
+    --border:#2a2f45;
+    --border-soft:#20243668;
+    --text:#eef0f7;
+    --text-dim:#9599b8;
+    --text-faint:#676c8a;
+    --violet:#a692ff;
+    --violet-dim:#6d5fc4;
+    --violet-glow:#a692ff33;
+    --amber:#f0a94e;
+    --amber-dim:#c9863a;
+    --teal:#5fd0be;
+    --rose:#ea6b83;
+    --radius:16px;
+    --radius-sm:10px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, #241c4a55, transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, #3a2a1a44, transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  ::selection{background:var(--violet-glow); color:var(--text);}
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ===== Header ===== */
+  header{
+    padding:34px 20px 18px;
+    text-align:center;
+    position:relative;
+  }
+  .mark{
+    width:56px; height:56px; margin:0 auto 14px;
+    display:block;
+  }
+  .mark .orbit{
+    transform-origin:32px 32px;
+    animation:spin 7s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .mark .orbit{animation:none;}
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(2rem, 8vw, 2.9rem);
+    letter-spacing:0.01em;
+    margin:0 0 6px;
+    background:linear-gradient(100deg, #f3f0ff 0%, var(--violet) 55%, var(--amber) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .tagline{
+    font-size:0.92rem;
+    color:var(--text-dim);
+    max-width:480px;
+    margin:0 auto;
+    font-style:italic;
+    font-family:'Fraunces', serif;
+  }
+  .tagline .mono{font-style:normal;}
+
+  /* ===== Nav ===== */
+  nav.tabs{
+    position:sticky; top:0; z-index:50;
+    display:flex; gap:6px;
+    overflow-x:auto;
+    padding:12px 14px;
+    background:#0c0e15dd;
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs button{
+    flex:0 0 auto;
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    padding:9px 15px;
+    border-radius:999px;
+    font-family:'Inter';
+    font-size:0.82rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    display:flex; align-items:center; gap:7px;
+    transition:all .18s ease;
+    white-space:nowrap;
+  }
+  nav.tabs button .n{
+    font-family:'IBM Plex Mono'; font-size:0.68rem; opacity:0.7;
+  }
+  nav.tabs button:hover{ color:var(--text); border-color:var(--violet-dim); }
+  nav.tabs button.active{
+    background:linear-gradient(135deg, var(--violet-dim), #4a3f92);
+    border-color:var(--violet);
+    color:#fff;
+    box-shadow:0 0 0 1px var(--violet-glow), 0 4px 16px -4px var(--violet-glow);
+  }
+
+  main{ max-width:960px; margin:0 auto; padding:22px 16px 80px; }
+
+  section.panel{ display:none; animation:fadeIn .35s ease; }
+  section.panel.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .section-head{ margin-bottom:20px; }
+  .section-head .eyebrow{
+    font-family:'IBM Plex Mono'; font-size:0.72rem; color:var(--amber);
+    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:6px;
+  }
+  .section-head h2{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.7rem; margin:0 0 6px;
+  }
+  .section-head p{ color:var(--text-dim); font-size:0.9rem; margin:0; max-width:60ch; }
+
+  /* ===== Cards / generic ===== */
+  .card{
+    background:linear-gradient(160deg, var(--panel), var(--panel-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px;
+  }
+  .grid{ display:grid; gap:14px; }
+  .grid.cols-2{ grid-template-columns:1fr 1fr; }
+  @media (max-width:640px){ .grid.cols-2{ grid-template-columns:1fr; } }
+
+  /* ===== Overview ===== */
+  .ov-card h3{
+    font-family:'Fraunces', serif; font-size:1.05rem; margin:0 0 10px;
+    color:var(--text); display:flex; align-items:center; gap:8px;
+  }
+  .ov-card h3 .dot{ width:8px; height:8px; border-radius:50%; background:var(--violet); flex:0 0 auto; }
+  .ov-card ul{ margin:0; padding-left:18px; color:var(--text-dim); font-size:0.87rem; line-height:1.6; }
+  .ov-card ul li{ margin-bottom:6px; }
+  .ov-card ul li strong{ color:var(--text); font-weight:600; }
+  .formula-box{
+    font-family:'IBM Plex Mono'; font-size:0.82rem; color:var(--teal);
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:10px 12px; margin:8px 0; line-height:1.7; overflow-x:auto;
+  }
+  .kb-pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono'; font-size:0.76rem;
+    background:#0e1119; border:1px solid var(--border); border-radius:999px;
+    padding:4px 10px; margin:2px 4px 2px 0; color:var(--amber);
+  }
+  .reactions-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; margin-top:6px; }
+  .rxn-chip{
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:12px; font-size:0.8rem;
+  }
+  .rxn-chip .num{ font-family:'IBM Plex Mono'; color:var(--amber); font-size:0.72rem; display:block; margin-bottom:4px;}
+  .rxn-chip b{ display:block; margin-bottom:4px; font-size:0.87rem; }
+  .rxn-chip span{ color:var(--text-dim); }
+
+  /* ===== Diagrams ===== */
+  .diag-card{ margin-bottom:18px; }
+  .diag-card h3{
+    font-family:'Fraunces', serif; font-size:1.08rem; margin:0 0 4px; display:flex; align-items:center; gap:8px;
+  }
+  .diag-card .hint{ font-size:0.78rem; color:var(--text-faint); margin-bottom:14px; }
+  .diag-card .readout{
+    margin-top:12px; background:#0e1119; border:1px dashed var(--border);
+    border-radius:var(--radius-sm); padding:12px 14px; font-size:0.83rem; color:var(--text-dim);
+    min-height:44px; display:flex; align-items:center;
+  }
+  .diag-card .readout b{ color:var(--violet); margin-right:6px; }
+  .diag-card .readout.empty{ color:var(--text-faint); font-style:italic; }
+
+  /* ladder */
+  .ladder{ display:flex; flex-direction:column; gap:6px; }
+  .rung{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:10px 14px; cursor:pointer; transition:all .15s ease;
+  }
+  .rung:hover{ border-color:var(--violet-dim); transform:translateX(2px); }
+  .rung.active{ border-color:var(--violet); background:#1a1730; }
+  .rung .label{ font-size:0.85rem; font-weight:600; }
+  .rung .kb{ font-family:'IBM Plex Mono'; font-size:0.75rem; color:var(--amber); }
+
+  /* toggle buttons row */
+  .btnrow{ display:flex; flex-wrap:wrap; gap:8px; }
+  .toggle-btn{
+    background:#0e1119; border:1px solid var(--border); color:var(--text-dim);
+    border-radius:999px; padding:7px 13px; font-size:0.78rem; font-family:'IBM Plex Mono';
+    cursor:pointer; transition:all .15s ease;
+  }
+  .toggle-btn:hover{ color:var(--text); border-color:var(--violet-dim); }
+  .toggle-btn.active-edg{ background:var(--teal); color:#06231d; border-color:var(--teal); font-weight:600;}
+  .toggle-btn.active-ewg{ background:var(--rose); color:#2b0812; border-color:var(--rose); font-weight:600;}
+
+  svg text{ font-family:'IBM Plex Mono', monospace; }
+
+  /* diazonium map */
+  .diaz-map{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:6px;}
+  .diaz-btn{
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:10px 12px; font-size:0.78rem; cursor:pointer; text-align:center; min-width:96px;
+    transition:all .15s ease;
+  }
+  .diaz-btn:hover{ border-color:var(--amber); }
+  .diaz-btn.active{ border-color:var(--amber); background:#241a10; }
+  .diaz-btn b{ display:block; font-family:'IBM Plex Mono'; color:var(--amber); font-size:0.8rem; }
+  .diaz-btn span{ color:var(--text-faint); font-size:0.7rem; }
+
+  table.compare{ width:100%; border-collapse:collapse; font-size:0.82rem; margin-top:6px;}
+  table.compare th, table.compare td{ padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; }
+  table.compare th{ color:var(--amber); font-family:'IBM Plex Mono'; font-weight:600; font-size:0.72rem; text-transform:uppercase; letter-spacing:.05em;}
+  table.compare td{ color:var(--text-dim); }
+  table.compare td b{ color:var(--text); }
+
+  /* ===== Mini Map ===== */
+  .minimap-wrap{ display:grid; grid-template-columns:220px 1fr; gap:16px; align-items:start; }
+  @media (max-width:640px){ .minimap-wrap{ grid-template-columns:1fr; } }
+  .topic-list{ display:flex; flex-direction:column; gap:6px; }
+  .topic-list button{
+    text-align:left; background:#0e1119; border:1px solid var(--border); color:var(--text-dim);
+    border-radius:var(--radius-sm); padding:11px 13px; font-size:0.83rem; font-weight:600;
+    cursor:pointer; transition:all .15s ease; font-family:'Inter';
+  }
+  .topic-list button:hover{ border-color:var(--violet-dim); color:var(--text); }
+  .topic-list button.active{ border-color:var(--violet); background:#1a1730; color:#fff; }
+  .reader{
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px; min-height:260px; position:sticky; top:70px;
+  }
+  .reader h4{ font-family:'Fraunces', serif; font-size:1.15rem; margin:0 0 10px; color:var(--violet); }
+  .reader p, .reader li{ font-size:0.87rem; color:var(--text-dim); line-height:1.7; }
+  .reader ul{ padding-left:18px; margin:8px 0; }
+  .reader .formula-box{ margin:10px 0; }
+
+  /* ===== Flash cards ===== */
+  .flash-controls{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; flex-wrap:wrap;}
+  .btn-outline{
+    background:transparent; border:1px solid var(--border); color:var(--text-dim);
+    padding:8px 14px; border-radius:999px; font-size:0.78rem; font-weight:600; cursor:pointer;
+    font-family:'Inter'; transition:all .15s ease;
+  }
+  .btn-outline:hover{ border-color:var(--amber); color:var(--amber); }
+  .progress-tag{ font-family:'IBM Plex Mono'; font-size:0.76rem; color:var(--text-faint); }
+
+  .flash-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:14px; }
+  .flash-card{
+    perspective:1200px; height:150px; cursor:pointer;
+  }
+  .flash-inner{
+    position:relative; width:100%; height:100%; transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flash-card.flipped .flash-inner{ transform:rotateY(180deg); }
+  .flash-face{
+    position:absolute; inset:0; backface-visibility:hidden;
+    border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; justify-content:center;
+    border:1px solid var(--border);
+  }
+  .flash-front{
+    background:linear-gradient(160deg, var(--panel), var(--panel-2));
+  }
+  .flash-front .k{ font-family:'IBM Plex Mono'; font-size:0.68rem; color:var(--amber); margin-bottom:8px; letter-spacing:.05em;}
+  .flash-front .term{ font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600; }
+  .flash-front .flip-hint{ margin-top:auto; font-size:0.68rem; color:var(--text-faint); }
+  .flash-back{
+    background:linear-gradient(160deg, #201839, #171226);
+    transform:rotateY(180deg);
+    border-color:var(--violet-dim);
+  }
+  .flash-back p{ font-size:0.79rem; color:#d8d6ec; line-height:1.55; margin:0; }
+
+  /* ===== Quiz ===== */
+  .quiz-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+  .score-tag{
+    font-family:'IBM Plex Mono'; font-size:0.82rem; background:#0e1119; border:1px solid var(--border);
+    border-radius:999px; padding:7px 14px; color:var(--teal);
+  }
+  .quiz-item{
+    background:#0e1119; border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px; margin-bottom:12px;
+  }
+  .quiz-item .qhead{ display:flex; gap:10px; margin-bottom:12px; }
+  .quiz-item .qnum{ font-family:'IBM Plex Mono'; color:var(--amber); font-size:0.8rem; flex:0 0 auto; }
+  .quiz-item .qtext{ font-size:0.88rem; font-weight:600; line-height:1.5; }
+  .opts{ display:flex; flex-direction:column; gap:7px; }
+  .opt{
+    text-align:left; background:var(--panel); border:1px solid var(--border); color:var(--text-dim);
+    border-radius:var(--radius-sm); padding:9px 12px; font-size:0.82rem; cursor:pointer;
+    transition:all .15s ease; font-family:'Inter';
+  }
+  .opt:hover{ border-color:var(--violet-dim); }
+  .opt.correct{ border-color:var(--teal); background:#0e2620; color:#c8f5ea; }
+  .opt.wrong{ border-color:var(--rose); background:#2a0f16; color:#ffd2da; }
+  .opt.disabled{ pointer-events:none; opacity:.85; }
+  .quiz-item.answered .opt:not(.correct):not(.wrong){ opacity:.45; }
+
+  footer{
+    text-align:center; padding:26px 16px 40px; color:var(--text-faint); font-size:0.76rem;
+    font-family:'IBM Plex Mono';
+  }
+  footer .heart{ color:var(--rose); }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="mark" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="none" stroke="#2a2f45" stroke-width="1"/>
+    <circle cx="32" cy="32" r="6" fill="#a692ff"/>
+    <text x="32" y="36" text-anchor="middle" font-size="8" fill="#0c0e15" font-weight="700">N</text>
+    <g class="orbit">
+      <ellipse cx="32" cy="32" rx="24" ry="11" fill="none" stroke="#f0a94e66" stroke-width="1"/>
+      <circle cx="8" cy="32" r="3" fill="#f0a94e"/>
+      <circle cx="56" cy="32" r="3" fill="#f0a94e"/>
+    </g>
+  </svg>
+  <h1 class="title">Study Smart</h1>
+  <p class="tagline">A companion for <span class="mono">Amines Reactions</span> — basicity, substitution &amp; diazonium chemistry</p>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="overview"><span class="n">01</span> Overview</button>
+  <button class="tab-btn" data-tab="diagrams"><span class="n">02</span> Diagrams</button>
+  <button class="tab-btn" data-tab="minimap"><span class="n">03</span> Mini Map</button>
+  <button class="tab-btn" data-tab="flash"><span class="n">04</span> Flash Cards</button>
+  <button class="tab-btn" data-tab="quiz"><span class="n">05</span> Quiz Bank</button>
+</nav>
+
+<main>
+
+  <!-- ============ 1. OVERVIEW ============ -->
+  <section class="panel active" id="overview">
+    <div class="section-head">
+      <div class="eyebrow">Section 01</div>
+      <h2>Overview</h2>
+      <p>The core laws and facts of the chapter — no lecture, just what you need to hold in your head.</p>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card ov-card">
+        <h3><span class="dot"></span>Basicity constant</h3>
+        <div class="formula-box">RNH₂ + H₂O ⇌ RNH₃⁺ + OH⁻ &nbsp;&nbsp; Kb = [RNH₃⁺][OH⁻] / [RNH₂]</div>
+        <ul>
+          <li>Amines are <strong>more basic than water</strong>, less basic than OH⁻.</li>
+          <li>Converted to salts by mineral acids; freed again by aqueous hydroxide.</li>
+        </ul>
+        <div style="margin-top:8px;">
+          <span class="kb-pill">Aliphatic: 10⁻³–10⁻⁴</span>
+          <span class="kb-pill">Ammonia: 1.8×10⁻⁵</span>
+          <span class="kb-pill">Aromatic: ≤10⁻⁹</span>
+        </div>
+      </div>
+
+      <div class="card ov-card">
+        <h3><span class="dot"></span>Structure → basicity</h3>
+        <ul>
+          <li>The <strong>more stable the cation</strong> relative to the free amine, the more basic the amine.</li>
+          <li>N is <strong>less electronegative</strong> than O → better accommodates the + charge than alcohols/ethers.</li>
+          <li>Alkyl groups <strong>release electrons</strong>, disperse the cation's charge → aliphatic amines beat ammonia.</li>
+          <li>In aniline, the lone pair is <strong>delocalized into the ring</strong> → less available → weaker base.</li>
+        </ul>
+      </div>
+
+      <div class="card ov-card">
+        <h3><span class="dot"></span>Substituents on aniline</h3>
+        <ul>
+          <li><strong>Electron-releasing</strong> (–NH₂, –OCH₃, –CH₃) → stabilize the cation → <strong>increase</strong> basicity.</li>
+          <li><strong>Electron-withdrawing</strong> (–NH₃⁺, –NO₂, –SO₃⁻, –COOH, –X) → destabilize the cation → <strong>decrease</strong> basicity.</li>
+        </ul>
+      </div>
+
+      <div class="card ov-card">
+        <h3><span class="dot"></span>Reactions at a glance</h3>
+        <div class="reactions-grid">
+          <div class="rxn-chip"><span class="num">01</span><b>Alkylation</b><span>RNH₂→R₂NH→R₃N→R₄N⁺X⁻</span></div>
+          <div class="rxn-chip"><span class="num">02</span><b>Amide formation</b><span>1° &amp; 2° amines + R'COCl</span></div>
+          <div class="rxn-chip"><span class="num">03</span><b>Ring substitution</b><span>NH₂ = strong o,p-director</span></div>
+          <div class="rxn-chip"><span class="num">04</span><b>Sulfonation</b><span>→ sulfanilic acid (zwitterion)</span></div>
+          <div class="rxn-chip"><span class="num">05</span><b>Sulfa drugs</b><span>metabolite antagonism vs PABA</span></div>
+          <div class="rxn-chip"><span class="num">06</span><b>Diazonium salts</b><span>replacement &amp; coupling</span></div>
+        </div>
+      </div>
+
+      <div class="card ov-card" style="grid-column:1/-1;">
+        <h3><span class="dot"></span>Amides from amines — quick rules</h3>
+        <ul>
+          <li>1° amine + R'COCl → <strong>N-substituted amide</strong> (R'CONHR)</li>
+          <li>2° amine + R'COCl → <strong>N,N-disubstituted amide</strong> (R'CONR₂)</li>
+          <li>3° amine + R'COCl → <strong>no reaction</strong> (no N–H to lose as a proton)</li>
+          <li><strong>Schotten–Baumann:</strong> acid chloride + amine, base = aqueous NaOH or pyridine.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. DIAGRAMS ============ -->
+  <section class="panel" id="diagrams">
+    <div class="section-head">
+      <div class="eyebrow">Section 02</div>
+      <h2>Diagrams</h2>
+      <p>Tap any element — rungs, groups, or branches — to read what it means.</p>
+    </div>
+
+    <!-- Basicity ladder -->
+    <div class="card diag-card">
+      <h3>Base-strength ladder</h3>
+      <div class="hint">Strongest base at top, weakest at bottom. Tap a rung.</div>
+      <div class="ladder" id="ladder"></div>
+      <div class="readout empty" id="ladder-readout">Tap a rung to see why it sits there.</div>
+    </div>
+
+    <!-- Substituent toggle -->
+    <div class="card diag-card">
+      <h3>Substituent effect on aniline's basicity</h3>
+      <div class="hint">Choose a group G on the ring and watch the verdict.</div>
+      <svg viewBox="0 0 260 140" width="100%" height="140" style="max-width:280px; display:block; margin:0 auto 12px;">
+        <polygon points="130,20 165,40 165,80 130,100 95,80 95,40" fill="none" stroke="#3a3f5c" stroke-width="2"/>
+        <line x1="130" y1="20" x2="130" y2="4" stroke="#5c6188" stroke-width="2"/>
+        <text x="130" y="0" text-anchor="middle" font-size="11" fill="#eef0f7">NH₂</text>
+        <line x1="130" y1="100" x2="130" y2="122" stroke="#5c6188" stroke-width="2"/>
+        <text id="g-label" x="130" y="136" text-anchor="middle" font-size="12" fill="#f0a94e" font-weight="600">G</text>
+        <text id="verdict-arrow" x="200" y="60" text-anchor="middle" font-size="26" fill="#5fd0be">—</text>
+      </svg>
+      <div class="btnrow">
+        <button class="toggle-btn" data-g="–NH₂" data-effect="edg">–NH₂</button>
+        <button class="toggle-btn" data-g="–OCH₃" data-effect="edg">–OCH₃</button>
+        <button class="toggle-btn" data-g="–CH₃" data-effect="edg">–CH₃</button>
+        <button class="toggle-btn" data-g="–NH₃⁺" data-effect="ewg">–NH₃⁺</button>
+        <button class="toggle-btn" data-g="–NO₂" data-effect="ewg">–NO₂</button>
+        <button class="toggle-btn" data-g="–SO₃⁻" data-effect="ewg">–SO₃⁻</button>
+        <button class="toggle-btn" data-g="–COOH" data-effect="ewg">–COOH</button>
+        <button class="toggle-btn" data-g="–X" data-effect="ewg">–X</button>
+      </div>
+      <div class="readout empty" id="sub-readout">Pick a group above.</div>
+    </div>
+
+    <!-- Alkylation ladder -->
+    <div class="card diag-card">
+      <h3>Amine class ladder (alkylation)</h3>
+      <div class="hint">Each RX adds one more alkyl group. Tap a step.</div>
+      <div class="ladder" id="alkyl-ladder"></div>
+      <div class="readout empty" id="alkyl-readout">Tap a step to see the product class.</div>
+    </div>
+
+    <!-- Directing effects -->
+    <div class="card diag-card">
+      <h3>Ring-substitution director</h3>
+      <div class="hint">Switch the N-group and see which ring positions light up.</div>
+      <svg viewBox="0 0 220 190" width="100%" height="190" style="max-width:240px; display:block; margin:0 auto 12px;">
+        <polygon points="110,20 150,45 150,95 110,120 70,95 70,45" fill="none" stroke="#3a3f5c" stroke-width="2"/>
+        <line x1="110" y1="20" x2="110" y2="2" stroke="#5c6188" stroke-width="2"/>
+        <text id="dir-label" x="110" y="-4" text-anchor="middle" font-size="10" fill="#eef0f7">NH₂</text>
+        <circle id="pos-o1" cx="150" cy="45" r="7" fill="#171a26" stroke="#3a3f5c" stroke-width="1.5"/>
+        <circle id="pos-o2" cx="70" cy="45" r="7" fill="#171a26" stroke="#3a3f5c" stroke-width="1.5"/>
+        <circle id="pos-m1" cx="150" cy="95" r="7" fill="#171a26" stroke="#3a3f5c" stroke-width="1.5"/>
+        <circle id="pos-m2" cx="70" cy="95" r="7" fill="#171a26" stroke="#3a3f5c" stroke-width="1.5"/>
+        <circle id="pos-p" cx="110" cy="120" r="7" fill="#171a26" stroke="#3a3f5c" stroke-width="1.5"/>
+        <text x="163" y="49" font-size="8" fill="#676c8a">o</text>
+        <text x="48" y="49" font-size="8" fill="#676c8a">o</text>
+        <text x="163" y="99" font-size="8" fill="#676c8a">m</text>
+        <text x="48" y="99" font-size="8" fill="#676c8a">m</text>
+        <text x="110" y="138" text-anchor="middle" font-size="8" fill="#676c8a">p</text>
+      </svg>
+      <div class="btnrow">
+        <button class="toggle-btn dir-btn active-edg" data-dir="nh2">–NH₂</button>
+        <button class="toggle-btn dir-btn" data-dir="nhcoch3">–NHCOCH₃</button>
+        <button class="toggle-btn dir-btn active-ewg" data-dir="nr3">–NR₃⁺</button>
+      </div>
+      <div class="readout" id="dir-readout"><b>–NH₂:</b>&nbsp;powerful activator, directs to ortho &amp; para.</div>
+    </div>
+
+    <!-- Diazonium map -->
+    <div class="card diag-card">
+      <h3>Diazonium salt reaction map</h3>
+      <div class="hint">ArNH₂ + NaNO₂ + 2HX (cold) → ArN₂⁺X⁻. Tap a branch to see reagent &amp; product.</div>
+      <div class="diaz-map" id="diaz-map"></div>
+      <div class="readout empty" id="diaz-readout">Tap a branch above.</div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="card diag-card">
+      <h3>Quick comparison table</h3>
+      <table class="compare">
+        <tr><th>Amine type</th><th>Kb</th><th>vs. ammonia</th></tr>
+        <tr><td><b>Aliphatic</b></td><td class="mono">10⁻³ – 10⁻⁴</td><td>stronger base</td></tr>
+        <tr><td><b>Ammonia</b></td><td class="mono">1.8 × 10⁻⁵</td><td>reference</td></tr>
+        <tr><td><b>Aromatic (aniline)</b></td><td class="mono">≤ 10⁻⁹</td><td>much weaker base</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 3. MINI MAP ============ -->
+  <section class="panel" id="minimap">
+    <div class="section-head">
+      <div class="eyebrow">Section 03</div>
+      <h2>Mini Map</h2>
+      <p>Tap a topic — the full text opens right here, in the reading pane.</p>
+    </div>
+    <div class="minimap-wrap">
+      <div class="topic-list" id="topic-list"></div>
+      <div class="reader" id="reader">
+        <h4>Pick a topic</h4>
+        <p>Select any title on the left to open it here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. FLASH CARDS ============ -->
+  <section class="panel" id="flash">
+    <div class="section-head">
+      <div class="eyebrow">Section 04</div>
+      <h2>Flash Cards</h2>
+      <p>Tap a card to flip it. Covers the full chapter, term by term.</p>
+    </div>
+    <div class="flash-controls">
+      <button class="btn-outline" id="shuffle-flash">Shuffle cards</button>
+      <span class="progress-tag" id="flash-count">30 cards</span>
+    </div>
+    <div class="flash-grid" id="flash-grid"></div>
+  </section>
+
+  <!-- ============ 5. QUIZ BANK ============ -->
+  <section class="panel" id="quiz">
+    <div class="section-head">
+      <div class="eyebrow">Section 05</div>
+      <h2>Quiz Bank</h2>
+      <p>32 questions, options shuffled on every attempt. Answer to see instant feedback.</p>
+    </div>
+    <div class="quiz-top">
+      <span class="score-tag" id="score-tag">Score: 0 / 0</span>
+      <button class="btn-outline" id="restart-quiz">Restart &amp; reshuffle</button>
+    </div>
+    <div id="quiz-list"></div>
+  </section>
+
+</main>
+
+<footer>
+  © <span id="year"></span> Study Smart — Amines Reactions &nbsp;·&nbsp; All rights reserved to <strong style="color:#eef0f7;">Anmar Taha</strong>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------- TAB NAVIGATION ---------- */
+const tabBtns = document.querySelectorAll('.tab-btn');
+tabBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    tabBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('section.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ---------- DIAGRAM 1: Basicity ladder ---------- */
+const ladderData = [
+  {label:'Hydroxide ion (OH⁻)', kb:'reference max', note:'The strongest base in the series — amines are always weaker bases than OH⁻.'},
+  {label:'Aliphatic amines', kb:'10⁻³ – 10⁻⁴', note:'Electron-releasing alkyl groups stabilize the ammonium cation, making these the strongest neutral bases here.'},
+  {label:'Ammonia (NH₃)', kb:'1.8 × 10⁻⁵', note:'The reference point — no alkyl groups to help stabilize the cation.'},
+  {label:'Aromatic amines (aniline)', kb:'≤ 10⁻⁹', note:'The lone pair is delocalized into the ring by resonance, so it is far less available to a proton.'},
+  {label:'Water (H₂O)', kb:'very weak base', note:'Amines are always more basic than water — that is why they can be liberated from their salts by aqueous hydroxide.'}
+];
+const ladderEl = document.getElementById('ladder');
+ladderData.forEach((d,i)=>{
+  const div = document.createElement('div');
+  div.className='rung';
+  div.innerHTML = `<span class="label">${d.label}</span><span class="kb mono">${d.kb}</span>`;
+  div.addEventListener('click', ()=>{
+    document.querySelectorAll('#ladder .rung').forEach(r=>r.classList.remove('active'));
+    div.classList.add('active');
+    const ro = document.getElementById('ladder-readout');
+    ro.classList.remove('empty');
+    ro.innerHTML = `<b>${d.label}:</b> ${d.note}`;
+  });
+  ladderEl.appendChild(div);
+});
+
+/* ---------- DIAGRAM 2: substituent effect ---------- */
+document.querySelectorAll('.btnrow .toggle-btn[data-g]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.btnrow .toggle-btn[data-g]').forEach(b=>b.classList.remove('active-edg','active-ewg'));
+    const eff = btn.dataset.effect;
+    btn.classList.add(eff==='edg' ? 'active-edg' : 'active-ewg');
+    document.getElementById('g-label').textContent = btn.dataset.g;
+    const arrow = document.getElementById('verdict-arrow');
+    const ro = document.getElementById('sub-readout');
+    ro.classList.remove('empty');
+    if(eff==='edg'){
+      arrow.textContent = '↑';
+      arrow.setAttribute('fill','#5fd0be');
+      ro.innerHTML = `<b>${btn.dataset.g} is electron-releasing:</b> it stabilizes the anilinium cation, so basicity <strong style="color:#5fd0be;">increases</strong>.`;
+    } else {
+      arrow.textContent = '↓';
+      arrow.setAttribute('fill','#ea6b83');
+      ro.innerHTML = `<b>${btn.dataset.g} is electron-withdrawing:</b> it destabilizes the anilinium cation, so basicity <strong style="color:#ea6b83;">decreases</strong>.`;
+    }
+  });
+});
+
+/* ---------- DIAGRAM 3: alkylation ladder ---------- */
+const alkylData = [
+  {label:'RNH₂ — primary amine', note:'Starting material. One RX away from a secondary amine.'},
+  {label:'+ RX → R₂NH — secondary amine', note:'The amine acts as the nucleophile, displacing the halide from RX.'},
+  {label:'+ RX → R₃N — tertiary amine', note:'A second alkylation replaces another N–H.'},
+  {label:'+ RX → R₄N⁺X⁻ — quaternary ammonium salt', note:'All four N–H/N-alkyl positions are filled; a permanent cation forms.'}
+];
+const alkylLadder = document.getElementById('alkyl-ladder');
+alkylData.forEach((d)=>{
+  const div = document.createElement('div');
+  div.className='rung';
+  div.innerHTML = `<span class="label mono" style="font-size:0.8rem;">${d.label}</span>`;
+  div.addEventListener('click', ()=>{
+    document.querySelectorAll('#alkyl-ladder .rung').forEach(r=>r.classList.remove('active'));
+    div.classList.add('active');
+    const ro = document.getElementById('alkyl-readout');
+    ro.classList.remove('empty');
+    ro.innerHTML = `<b>${d.label}</b> ${d.note}`;
+  });
+  alkylLadder.appendChild(div);
+});
+
+/* ---------- DIAGRAM 4: directing effects ---------- */
+const dirData = {
+  nh2:{ label:'NH₂', note:'powerful activator, directs to ortho & para.', ortho:true, para:true, meta:false, color:'#5fd0be'},
+  nhcoch3:{ label:'NHCOCH₃', note:'still an activator and o,p-director, but weaker — the carbonyl pulls electron density away from N.', ortho:true, para:true, meta:false, color:'#f0a94e'},
+  nr3:{ label:'NR₃⁺', note:'powerful deactivator, directs to meta — the positive charge repels the approaching electrophile from o/p.', ortho:false, para:false, meta:true, color:'#ea6b83'}
+};
+function paintDirector(key){
+  const d = dirData[key];
+  document.getElementById('dir-label').textContent = '–'+d.label;
+  const on = d.color, off='#171a26';
+  ['pos-o1','pos-o2'].forEach(id=>document.getElementById(id).setAttribute('fill', d.ortho? on: off));
+  document.getElementById('pos-p').setAttribute('fill', d.para? on: off);
+  ['pos-m1','pos-m2'].forEach(id=>document.getElementById(id).setAttribute('fill', d.meta? on: off));
+  document.getElementById('dir-readout').innerHTML = `<b>–${d.label}:</b>&nbsp;${d.note}`;
+}
+document.querySelectorAll('.dir-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.dir-btn').forEach(b=>b.classList.remove('active-edg','active-ewg'));
+    const key = btn.dataset.dir;
+    btn.classList.add(key==='nr3' ? 'active-ewg' : 'active-edg');
+    paintDirector(key);
+  });
+});
+paintDirector('nh2');
+
+/* ---------- DIAGRAM 5: diazonium map ---------- */
+const diazData = [
+  {tag:'CuCl', product:'ArCl', note:'Sandmeyer reaction: diazonium salt + CuCl → aryl chloride + N₂.'},
+  {tag:'CuBr', product:'ArBr', note:'Sandmeyer reaction: diazonium salt + CuBr → aryl bromide + N₂.'},
+  {tag:'CuCN', product:'ArCN → ArCOOH', note:'Gives an aryl nitrile; hydrolysis of the nitrile then yields a carboxylic acid — a route from nitro compounds to –COOH.'},
+  {tag:'H₂O, H⁺, heat', product:'ArOH', note:'Replacement by OH — the classic synthesis of phenols from primary aromatic amines.'},
+  {tag:'H₃PO₂', product:'ArH', note:'Reductive deamination: ArN₂⁺ + H₃PO₂ + H₂O → ArH + H₃PO₃ + N₂. Removes the amino group entirely.'},
+  {tag:'Coupling', product:"Ar–N=N–Ar' (azo)", note:"Nitrogen is retained (not lost as N₂). Needs a strongly electron-releasing G (OH, NH₂, NHR, NR₂) on the coupling partner. Azo compounds are strongly colored — the basis of azo dyes and indicators like methyl orange."}
+];
+const diazMap = document.getElementById('diaz-map');
+diazData.forEach(d=>{
+  const btn = document.createElement('div');
+  btn.className='diaz-btn';
+  btn.innerHTML = `<b>${d.tag}</b><span>${d.product}</span>`;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.diaz-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const ro = document.getElementById('diaz-readout');
+    ro.classList.remove('empty');
+    ro.innerHTML = `<b>${d.tag} → ${d.product}:</b> ${d.note}`;
+  });
+  diazMap.appendChild(btn);
+});
+
+/* ---------- SECTION 3: Mini map ---------- */
+const topics = [
+  {title:'Basicity constant', html:`<h4>Basicity constant</h4>
+    <div class="formula-box">RNH₂ + H₂O ⇌ RNH₃⁺ + OH⁻ &nbsp; Kb = [RNH₃⁺][OH⁻] / [RNH₂]</div>
+    <p>Like ammonia, amines are converted into their salts by aqueous mineral acids and liberated from their salts by aqueous hydroxides. Amines are more basic than water and less basic than hydroxide ion.</p>
+    <ul><li>Aliphatic amines: Kb ≈ 10⁻³ to 10⁻⁴ (stronger bases than ammonia, Kb = 1.8×10⁻⁵).</li>
+    <li>Aromatic amines: Kb ≈ 10⁻⁹ or less (considerably weaker bases than ammonia).</li></ul>`},
+
+  {title:'Structure & basicity', html:`<h4>Structure and basicity</h4>
+    <ul>
+      <li>The more stable the ion relative to the amine it forms from, the more basic the amine.</li>
+      <li>All amines are more basic than alcohols, ethers, esters — nitrogen is less electronegative than oxygen and better accommodates the cation's positive charge.</li>
+      <li>An aliphatic amine is more basic than ammonia because electron-releasing alkyl groups disperse the positive charge of the substituted ammonium ion, stabilizing it.</li>
+      <li>An alkyl group pushes electrons toward nitrogen, making the lone pair more available for sharing with an acid.</li>
+      <li>Aniline is a weaker base than ammonia because the fourth electron pair is partly shared with the aromatic ring (via resonance) and thus less available for sharing with H⁺.</li>
+    </ul>`},
+
+  {title:'Substituent effects on aniline', html:`<h4>Effect of substituents on basicity of aromatic amines</h4>
+    <ul>
+      <li>An electron-releasing substituent like –CH₃ increases the basicity of aniline (G = –NH₂, –OCH₃, –CH₃ release electrons, stabilize the cation).</li>
+      <li>An electron-withdrawing substituent like –X and –NO₂ decreases the basicity (G = –NH₃⁺, –NO₂, –SO₃⁻, –COOH, –X withdraw electrons, destabilize the cation).</li>
+    </ul>`},
+
+  {title:'Alkylation of amines', html:`<h4>Alkylation</h4>
+    <div class="formula-box">RNH₂ →RX→ R₂NH →RX→ R₃N →RX→ R₄N⁺X⁻</div>
+    <p>Like ammonia, an amine reacts with an alkyl halide; the product is an amine of the next higher class. The alkyl halide undergoes nucleophilic substitution, with the basic amine as the nucleophile. One hydrogen on nitrogen is replaced by an alkyl group.</p>
+    <p>The amine can be aliphatic or aromatic, primary, secondary, or tertiary; the halide is generally an alkyl halide. This can occur as a side reaction during preparation of primary amines by ammonolysis of halides, and as a route to secondary and tertiary amines.</p>`},
+
+  {title:'Conversion into amides', html:`<h4>Conversion into amides</h4>
+    <p>Ammonia reacts with acid chlorides of carboxylic acids to yield amides (Cl replaced by NH₂). Acid chlorides of sulfonic acids react similarly to give sulfonamides.</p>
+    <ul>
+      <li>Primary amine + R'COCl → N-substituted amide (R'CONHR); + ArSO₂Cl → N-substituted sulfonamide.</li>
+      <li>Secondary amine + R'COCl → N,N-disubstituted amide (R'CONR₂); + ArSO₂Cl → N,N-disubstituted sulfonamide.</li>
+      <li>Tertiary amine: no reaction with either — it cannot lose a proton to stabilize the product after attaching to carbon or sulfur.</li>
+    </ul>
+    <p>Substituted amides of aromatic carboxylic/sulfonic acids are made by the <strong>Schotten–Baumann</strong> technique: the acid chloride is added to the amine in the presence of a base (aqueous NaOH or pyridine). Example: aniline + benzoyl chloride --pyridine--> benzanilide.</p>`},
+
+  {title:'Ring substitution in aromatic amines', html:`<h4>Ring substitution in aromatic amines</h4>
+    <ul>
+      <li>–NH₂, –NHR, –NR₂ act as powerful activators and ortho-para directors in electrophilic aromatic substitution.</li>
+      <li>–NHCOCH₃ (acetamido) is also activating and o,p-directing, but less powerfully — the carbonyl oxygen withdraws electrons, making the amide nitrogen a poorer electron source, so amides are much weaker bases than amines.</li>
+      <li>–NR₃⁺ is a powerful deactivator and meta director.</li>
+      <li>Aromatic amines are too reactive: halogenation substitutes at every available ortho/para position; nitric acid both nitrates and oxidizes the ring (loss as tar); in strongly acidic nitration medium the amine becomes the anilinium ion (–NH₃⁺), which directs to meta instead.</li>
+      <li><strong>Solution:</strong> acetylate the amine to protect it, carry out the substitution, then hydrolyze the amide back to the free amine. Example: p-toluidine → aceto-p-toluidide → brominate → hydrolyze → 3-bromo-4-aminotoluene.</li>
+    </ul>`},
+
+  {title:'Sulfonation & dipolar ions', html:`<h4>Sulfonation of aromatic amines · Dipolar ions</h4>
+    <ul>
+      <li>Aniline is sulfonated by "baking" the salt, anilinium hydrogen sulfate, at 180–200°C; the chief product is the para isomer.</li>
+      <li>Sulfonation is reversible, and the p-isomer is the most stable — the product obtained may be set by equilibrium position rather than relative rates of formation.</li>
+      <li>Sulfonation of amines proceeds by a mechanism entirely different from ordinary aromatic substitution.</li>
+      <li>The product, sulfanilic acid, exists as a dipolar ion (zwitterion, ⁺NH₃–C₆H₄–SO₃⁻) — insoluble in water in that form; treatment with OH⁻ converts it to the soluble NH₂–C₆H₄–SO₃⁻ form.</li>
+    </ul>`},
+
+  {title:'Sulfanilamide & the sulfa drugs', html:`<h4>Sulfanilamide · The sulfa drugs</h4>
+    <ul>
+      <li>The amide of sulfanilic acid (sulfanilamide) and related substituted amides are medically important as the sulfa drugs.</li>
+      <li>Sulfonamides are prepared by reacting a sulfonyl chloride with ammonia or an amine.</li>
+      <li>Because the sulfonic acid molecule also carries an amino group, the amine is protected by acetylation before the sulfonyl chloride is prepared (otherwise one molecule's sulfonyl group could attack another molecule's amino group).</li>
+      <li><strong>Metabolite antagonism:</strong> bacterial enzymes mistake sulfanilamide for p-aminobenzoic acid (PABA), an essential metabolite. Sulfanilamide competes with PABA for the enzyme's reactive sites; deprived of PABA, the organism fails to reproduce and dies.</li>
+    </ul>`},
+
+  {title:'Diazonium salts — preparation', html:`<h4>Diazonium salts: preparation</h4>
+    <div class="formula-box">ArNH₂ + NaNO₂ + 2HX --cold--> ArN≡N:⁺X⁻ + NaX + 2H₂O</div>
+    <p>When a primary aromatic amine, dissolved or suspended in cold aqueous mineral acid, is treated with sodium nitrite, a diazonium salt forms.</p>
+    <p>Diazonium reactions fall into two classes: <strong>replacement</strong> (N is lost as N₂, another atom/group takes its place on the ring) and <strong>coupling</strong> (nitrogen is retained in the product).</p>`},
+
+  {title:'Replacement reactions', html:`<h4>Replacement reactions of diazonium salts</h4>
+    <ul>
+      <li><strong>Sandmeyer reaction — halogen:</strong> ArN₂⁺ + CuCl → ArCl + N₂; ArN₂⁺ + CuBr → ArBr + N₂.</li>
+      <li><strong>Replacement by CN:</strong> ArN₂⁺ + CuCN → ArCN + N₂. Hydrolysis of the nitrile gives a carboxylic acid — an excellent route from nitro compounds to –COOH (nitro → amine → diazonium → nitrile → acid).</li>
+      <li><strong>Replacement by OH — phenol synthesis:</strong> ArN₂⁺ + H₂O --H⁺, heat--> ArOH + N₂.</li>
+      <li><strong>Replacement by H:</strong> ArN₂⁺ + H₃PO₂ + H₂O → ArH + H₃PO₃ + N₂ (reductive deamination).</li>
+    </ul>`},
+
+  {title:'Coupling reactions', html:`<h4>Coupling</h4>
+    <p>Under proper conditions, diazonium salts react with certain aromatic compounds to give products of general formula Ar–N=N–Ar', called <strong>azo compounds</strong>. Here the nitrogen of the diazonium group is retained — unlike replacement reactions, where it is lost.</p>
+    <div class="formula-box">ArN₂⁺X⁻ + Ar'–G --weakly alkaline--> Ar–N=N–Ar'–G</div>
+    <p>G on the coupling partner must be a strongly electron-releasing group: –OH, –NR₂, –NHR, –NH₂.</p>
+    <p>Azo compounds are the first class encountered that are strongly colored (yellow, orange, red, blue, even green) — about half of industrial dyes are azo dyes. Some acid–base indicators are azo compounds too, e.g. <strong>methyl orange</strong> (red in acid, yellow in base).</p>`}
+];
+const topicList = document.getElementById('topic-list');
+const reader = document.getElementById('reader');
+topics.forEach((t,i)=>{
+  const btn = document.createElement('button');
+  btn.textContent = t.title;
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#topic-list button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    reader.innerHTML = t.html;
+    if(window.innerWidth < 640){ reader.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+  topicList.appendChild(btn);
+  if(i===0){ btn.classList.add('active'); reader.innerHTML = t.html; }
+});
+
+/* ---------- SECTION 4: Flash cards ---------- */
+const flashData = [
+  {t:'Basicity constant, Kb', d:'Kb = [RNH₃⁺][OH⁻] / [RNH₂] — the equilibrium constant for RNH₂ + H₂O ⇌ RNH₃⁺ + OH⁻.'},
+  {t:'Aliphatic amine Kb range', d:'About 10⁻³ to 10⁻⁴ — somewhat stronger bases than ammonia (Kb = 1.8×10⁻⁵).'},
+  {t:'Aromatic amine Kb range', d:'About 10⁻⁹ or less — considerably weaker bases than ammonia.'},
+  {t:'Why amines beat alcohols in basicity', d:'Nitrogen is less electronegative than oxygen, so it better accommodates the positive charge of the resulting cation.'},
+  {t:'Why aliphatic amines beat ammonia', d:'Electron-releasing alkyl groups disperse the positive charge of the ammonium ion, stabilizing it — like the way alkyl groups stabilize a carbonium ion.'},
+  {t:'Why aniline is weaker than ammonia', d:"The nitrogen's fourth electron pair is partly shared (delocalized) with the aromatic ring by resonance, so it's less available to bond a proton."},
+  {t:'Electron-releasing G on aniline', d:'–NH₂, –OCH₃, –CH₃ stabilize the anilinium cation and increase basicity.'},
+  {t:'Electron-withdrawing G on aniline', d:'–NH₃⁺, –NO₂, –SO₃⁻, –COOH, –X destabilize the cation and decrease basicity.'},
+  {t:'Alkylation of amines', d:'An amine reacts with RX by nucleophilic substitution; the amine is the nucleophile and one N–H is replaced by an alkyl group, giving the next higher class of amine.'},
+  {t:'Amine class ladder', d:'RNH₂ (1°) → R₂NH (2°) → R₃N (3°) → R₄N⁺X⁻ (quaternary ammonium salt), each step adding one RX.'},
+  {t:'Amide from 1° amine', d:"1° amine + R'COCl → R'CONHR, an N-substituted amide."},
+  {t:'Amide from 2° amine', d:"2° amine + R'COCl → R'CONR₂, an N,N-disubstituted amide."},
+  {t:'Why 3° amines resist amide formation', d:'A tertiary amine has no N–H left to lose as a proton after attacking the carbonyl carbon, so the reaction cannot proceed to a stable product.'},
+  {t:'Schotten–Baumann technique', d:'Acid chloride is added to the amine in the presence of a base — aqueous NaOH or pyridine — to make substituted amides of aromatic acids.'},
+  {t:'Sulfonyl chloride + amine', d:'Gives a sulfonamide (Ar–SO₂–NHR), the sulfonic-acid analog of amide formation.'},
+  {t:'–NH₂ as a ring director', d:'A powerful activator; directs electrophilic substitution to ortho and para positions.'},
+  {t:'–NHCOCH₃ vs –NH₂ as director', d:'Still an activator/o,p-director, but weaker — the carbonyl oxygen withdraws electron density from nitrogen.'},
+  {t:'–NR₃⁺ as a ring director', d:'A powerful deactivator and meta director, because the positive charge repels electrophiles from o/p.'},
+  {t:'Why protect aniline before nitration', d:'Free aniline is over-reactive (halogenates at every o/p site) and in strong nitration acid becomes anilinium (–NH₃⁺), which directs meta and lets nitric acid oxidize the ring to tar.'},
+  {t:'Protection strategy for ring substitution', d:'Acetylate the amine (–NH₂ → –NHCOCH₃) before nitration/halogenation, run the substitution, then hydrolyze the amide back to the free amine.'},
+  {t:'Sulfonation of aniline', d:'"Baking" anilinium hydrogen sulfate at 180–200°C gives mainly the para isomer, sulfanilic acid.'},
+  {t:'Sulfanilic acid', d:'A dipolar ion (zwitterion): ⁺NH₃–C₆H₄–SO₃⁻, insoluble in water; treatment with OH⁻ converts it to the soluble neutral-amine form.'},
+  {t:'Sulfanilamide', d:'The amide of sulfanilic acid; a sulfa drug with antibacterial activity.'},
+  {t:'Metabolite antagonism', d:'Bacterial enzymes mistake sulfanilamide for p-aminobenzoic acid (PABA) and it competes for the same reactive sites, starving the organism of an essential metabolite.'},
+  {t:'Diazonium salt preparation', d:'ArNH₂ + NaNO₂ + 2HX, kept cold, gives ArN₂⁺X⁻ + NaX + 2H₂O.'},
+  {t:'Sandmeyer reaction', d:'ArN₂⁺ + CuCl (or CuBr) → ArCl (or ArBr) + N₂ — replaces the diazonium group with a halogen.'},
+  {t:'Diazonium → carboxylic acid route', d:'ArN₂⁺ + CuCN → ArCN + N₂; hydrolysis of the nitrile then gives ArCOOH — a path from a nitro compound to a carboxylic acid.'},
+  {t:'Diazonium → phenol', d:'ArN₂⁺ + H₂O, H⁺, heat → ArOH + N₂ — the standard synthesis of phenols from primary aromatic amines.'},
+  {t:'Diazonium → ArH (deamination)', d:'ArN₂⁺ + H₃PO₂ + H₂O → ArH + H₃PO₃ + N₂ — removes the amino group from the ring entirely.'},
+  {t:'Coupling & azo compounds', d:"ArN₂⁺ + Ar'–G (G = strong electron releaser: OH, NH₂, NHR, NR₂) → Ar–N=N–Ar', an azo compound. Nitrogen is retained, not lost. Azo compounds are strongly colored — the basis of azo dyes and indicators like methyl orange."}
+];
+let flashOrder = flashData.map((_,i)=>i);
+function renderFlash(){
+  const grid = document.getElementById('flash-grid');
+  grid.innerHTML='';
+  flashOrder.forEach(i=>{
+    const f = flashData[i];
+    const card = document.createElement('div');
+    card.className='flash-card';
+    card.innerHTML = `
+      <div class="flash-inner">
+        <div class="flash-face flash-front">
+          <span class="k">TERM</span>
+          <span class="term">${f.t}</span>
+          <span class="flip-hint">tap to flip</span>
+        </div>
+        <div class="flash-face flash-back">
+          <p>${f.d}</p>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+  document.getElementById('flash-count').textContent = flashData.length + ' cards';
+}
+renderFlash();
+document.getElementById('shuffle-flash').addEventListener('click', ()=>{
+  for(let i=flashOrder.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [flashOrder[i],flashOrder[j]]=[flashOrder[j],flashOrder[i]];
+  }
+  renderFlash();
+});
+
+/* ---------- SECTION 5: Quiz bank ---------- */
+const quizData = [
+  {q:'What does Kb express for an amine?', opts:['[RNH₃⁺][OH⁻] / [RNH₂]','[RNH₂] / [RNH₃⁺][OH⁻]','[RNH₂][OH⁻] / [RNH₃⁺]','[H₃O⁺][RNH₂] / [RNH₃⁺]'], c:0},
+  {q:"What is ammonia's Kb value?", opts:['1.8 × 10⁻⁵','1.8 × 10⁻³','1.8 × 10⁻⁹','1.8 × 10⁻¹'], c:0},
+  {q:'Typical Kb range for aliphatic amines is:', opts:['10⁻³ to 10⁻⁴','10⁻⁶ to 10⁻⁷','10⁻⁹ or less','10⁻¹ to 10⁻²'], c:0},
+  {q:'Typical Kb for aromatic amines is:', opts:['10⁻⁹ or less','10⁻³ to 10⁻⁴','same as ammonia','greater than aliphatic amines'], c:0},
+  {q:'Aliphatic amines are more basic than ammonia mainly because:', opts:['alkyl groups release electrons and stabilize the ammonium cation','alkyl groups withdraw electrons from nitrogen','they have no lone pair','nitrogen becomes more electronegative'], c:0},
+  {q:'Amines are more basic than alcohols because:', opts:['nitrogen is less electronegative than oxygen','nitrogen is more electronegative than oxygen','oxygen has no lone pair','alcohols have no acidic protons'], c:0},
+  {q:'Aniline is a weaker base than ammonia because:', opts:["the lone pair is delocalized into the ring by resonance","the ring withdraws no electron density","aniline has an extra alkyl group","nitrogen is more electronegative in aniline"], c:0},
+  {q:'Which group on aniline increases its basicity?', opts:['–NH₂','–NO₂','–SO₃⁻','–NH₃⁺'], c:0},
+  {q:'Which group on aniline decreases its basicity?', opts:['–NO₂','–CH₃','–OCH₃','–NH₂'], c:0},
+  {q:'Which group is the most powerful deactivator and meta director?', opts:['–NR₃⁺','–NH₂','–NHCOCH₃','–OCH₃'], c:0},
+  {q:'RNH₂ treated repeatedly with excess RX eventually gives:', opts:['R₄N⁺X⁻, a quaternary ammonium salt','only R₂NH','no reaction after the first step','RCOOH'], c:0},
+  {q:'In amine alkylation, the amine acts as the:', opts:['nucleophile','electrophile','leaving group','oxidizing agent'], c:0},
+  {q:'A tertiary amine (R₃N) reacted with an acid chloride:', opts:['gives no reaction','gives an N,N-disubstituted amide','gives an N-substituted amide','forms a quaternary ammonium salt directly'], c:0},
+  {q:'Why do tertiary amines fail to form amides with acid chlorides?', opts:['they cannot lose a proton to stabilize the product','they are not nucleophilic','they have no lone pair','they are too basic'], c:0},
+  {q:'The Schotten–Baumann technique uses which bases?', opts:['aqueous NaOH or pyridine','only H₂SO₄','only HCl','NaNO₂ and HX'], c:0},
+  {q:'Aniline + benzoyl chloride with pyridine gives:', opts:['benzanilide','acetanilide','sulfanilamide','p-nitroaniline'], c:0},
+  {q:'A 2° amine reacting with R\'COCl produces:', opts:["R'CONR₂, an N,N-disubstituted amide","R'CONHR, an N-substituted amide","no reaction","a diazonium salt"], c:0},
+  {q:'The –NHCOCH₃ group on a ring is:', opts:['an activator and o,p-director, weaker than –NH₂','a deactivator and meta director','non-directing','identical in strength to –NH₂'], c:0},
+  {q:'Why is –NHCOCH₃ a weaker activator than –NH₂?', opts:['the carbonyl oxygen withdraws electron density from nitrogen','it has no lone pair','it is a larger atom','it is positively charged'], c:0},
+  {q:'Halogenating free (unprotected) aniline tends to give:', opts:['substitution at every available ortho/para site','only mono-substitution','meta substitution exclusively','no reaction'], c:0},
+  {q:'In strongly acidic nitration medium, aniline is converted to:', opts:['the anilinium ion (–NH₃⁺), which directs meta','a diazonium salt','a phenol','sulfanilic acid'], c:0},
+  {q:'The standard fix for nitrating or halogenating aniline safely is to:', opts:['acetylate the amine first, then hydrolyze the amide afterward','sulfonate it first','use excess base only','heat it strongly with no protection'], c:0},
+  {q:'Sulfonating aniline is done by:', opts:['baking anilinium hydrogen sulfate at 180–200°C','treating aniline with dilute H₂SO₄ at room temperature','reacting aniline with SO₃ gas at 0°C','no such reaction exists'], c:0},
+  {q:'The major product of aniline sulfonation is:', opts:['sulfanilic acid (mainly the para isomer)','sulfanilamide','benzanilide','p-nitroaniline'], c:0},
+  {q:'Sulfanilic acid exists in water mainly as a:', opts:['dipolar ion (zwitterion)','simple neutral molecule','carboxylate salt','diazonium salt'], c:0},
+  {q:'Sulfanilamide is medically significant as a:', opts:['sulfa drug (antibacterial)','analgesic','anesthetic','antioxidant'], c:0},
+  {q:'Sulfanilamide kills bacteria through:', opts:['metabolite antagonism with p-aminobenzoic acid (PABA)','directly dissolving the cell wall','oxidizing bacterial DNA','blocking oxygen uptake'], c:0},
+  {q:'Diazonium salts are prepared under what condition?', opts:['cold, with NaNO₂ and aqueous mineral acid','boiling, with NaOH','cold, with H₃PO₂','high pressure, with CuCl'], c:0},
+  {q:'The Sandmeyer reaction converts ArN₂⁺ into ArCl using:', opts:['CuCl', 'CuCN', 'H₃PO₂', 'H₂O/H⁺/heat'], c:0},
+  {q:'To make an aryl nitrile from a diazonium salt, use:', opts:['CuCN','CuCl','CuBr','H₃PO₂'], c:0},
+  {q:'Hydrolyzing an aryl nitrile (ArCN) gives:', opts:['a carboxylic acid, ArCOOH','a phenol, ArOH','an amine, ArNH₂','an azo compound'], c:0},
+  {q:'To convert a diazonium salt into a phenol, use:', opts:['H₂O, H⁺, heat','CuCl','H₃PO₂','NaOH, cold'], c:0},
+  {q:'Reductive deamination of a diazonium salt (removing N entirely, giving ArH) uses:', opts:['H₃PO₂','CuCl','CuCN','pyridine'], c:0},
+  {q:'In diazonium replacement reactions, nitrogen is:', opts:['lost as N₂ gas','retained in the product','converted to NH₃','oxidized to NO₂'], c:0},
+  {q:'In diazonium coupling reactions, nitrogen is:', opts:['retained in the product as an azo linkage','lost as N₂ gas','reduced to NH₂','converted into a nitrile'], c:0},
+  {q:'A coupling partner ring (Ar\'–G) needs G to be:', opts:['a strongly electron-releasing group (OH, NH₂, NHR, NR₂)','a strongly electron-withdrawing group','a halogen only','a carboxylic acid'], c:0},
+  {q:'The general formula of an azo compound is:', opts:["Ar–N=N–Ar'","Ar–NH–NH–Ar'","Ar–N≡N–Ar'⁺","Ar–CO–N=N–Ar'"], c:0},
+  {q:'Methyl orange, an azo compound, behaves as:', opts:['an acid–base indicator: red in acid, yellow in base','a sulfa drug','a phenol synthesis reagent','a reducing agent for diazonium salts'], c:0}
+];
+
+let quizState = [];
+function buildQuiz(){
+  quizState = quizData.map(item=>{
+    const opts = item.opts.map((text,idx)=>({text, correct: idx===item.c}));
+    for(let i=opts.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [opts[i],opts[j]]=[opts[j],opts[i]];
+    }
+    return {q:item.q, opts, answered:false};
+  });
+  renderQuiz();
+  updateScore();
+}
+function updateScore(){
+  const answered = quizState.filter(q=>q.answered);
+  const correct = answered.filter(q=>q.opts.find(o=>o.picked&&o.correct)).length;
+  document.getElementById('score-tag').textContent = `Score: ${correct} / ${answered.length} answered (of ${quizState.length})`;
+}
+function renderQuiz(){
+  const list = document.getElementById('quiz-list');
+  list.innerHTML='';
+  quizState.forEach((item, qi)=>{
+    const div = document.createElement('div');
+    div.className='quiz-item';
+    div.innerHTML = `
+      <div class="qhead"><span class="qnum mono">Q${qi+1}</span><span class="qtext">${item.q}</span></div>
+      <div class="opts"></div>`;
+    const optsWrap = div.querySelector('.opts');
+    item.opts.forEach((o, oi)=>{
+      const b = document.createElement('button');
+      b.className='opt';
+      b.textContent = o.text;
+      b.addEventListener('click', ()=>{
+        if(item.answered) return;
+        item.answered = true;
+        o.picked = true;
+        div.classList.add('answered');
+        item.opts.forEach((oo,ooi)=>{
+          const el = optsWrap.children[ooi];
+          el.classList.add('disabled');
+          if(oo.correct) el.classList.add('correct');
+          else if(oo===o) el.classList.add('wrong');
+        });
+        updateScore();
+      });
+      optsWrap.appendChild(b);
+    });
+    list.appendChild(div);
+  });
+}
+document.getElementById('restart-quiz').addEventListener('click', buildQuiz);
+buildQuiz();
+</script>
+</body>
+</html>
